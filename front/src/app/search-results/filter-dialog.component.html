@@ -1,0 +1,56 @@
+<div class="filter-dialog">
+  <div class="features-amenities">
+    <h2 mat-dialog-title>Features & amenities</h2>
+    <mat-dialog-content class="filter-dialog-content">
+      <mat-checkbox [(ngModel)]="wifi" color="primary">Internet or Wifi</mat-checkbox>
+      <mat-checkbox [(ngModel)]="airCondition" color="primary">Air conditioning</mat-checkbox>
+      <mat-checkbox [(ngModel)]="kitchen" color="primary">Kitchen</mat-checkbox>
+      <mat-checkbox [(ngModel)]="tv" color="primary">TV</mat-checkbox>
+      <mat-checkbox [(ngModel)]="parking" color="primary">Parking available</mat-checkbox>
+      <mat-checkbox [(ngModel)]="elevator" color="primary">Elevator</mat-checkbox>
+    </mat-dialog-content>
+  </div>
+  <div class="property-type">
+    <h2 mat-dialog-title>Property type</h2>
+    <mat-dialog-content class="filter-dialog-content">
+      <mat-checkbox [(ngModel)]="apartment" color="primary">Apartment</mat-checkbox>
+      <mat-checkbox [(ngModel)]="corporateApartment" color="primary">Corporate apartment</mat-checkbox>
+      <mat-checkbox [(ngModel)]="guestHouse" color="primary">Guest house</mat-checkbox>
+    </mat-dialog-content>
+  </div>
+  <div class="price-per-night">
+    <h2 mat-dialog-title>Price per night (€)</h2>
+    <mat-dialog-content class="dialog-content-prices">
+      <mat-form-field appearance="fill">
+        <mat-label>Min</mat-label>
+        <input matInput type="number" [(ngModel)]="minValue" readonly>
+      </mat-form-field>
+      <mat-slider
+        [min]="minPrice"
+        [max]="maxPrice"
+        [step]="1"
+        [(ngModel)]="minValue"
+        color="primary">
+      </mat-slider>
+      <br>
+      <mat-form-field appearance="fill">
+        <mat-label>Max</mat-label>
+        <input matInput type="number" [(ngModel)]="maxValue" readonly>
+      </mat-form-field>
+      <mat-slider
+        [min]="minPrice"
+        [max]="maxPrice"
+        [step]="1"
+        [(ngModel)]="maxValue"
+        color="primary">
+      </mat-slider>
+    </mat-dialog-content>
+  </div>
+  <div class="dialog-buttons">
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>Cancel</button>
+      <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
+      <button mat-button (click)="applyFilters()" [mat-dialog-close]="true" cdkFocusInitial>Apply filter</button>
+    </mat-dialog-actions>
+  </div>
+</div>

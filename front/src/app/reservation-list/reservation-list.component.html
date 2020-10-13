@@ -1,0 +1,29 @@
+<div class="heading-reservation-list">
+    <div class="blank"></div>
+    <h1>Here you can see your reservations!</h1>
+</div>
+
+<div class="results-list">
+    <div *ngFor="let reservation of reservationList" class="room-grid">
+        <div class="photo">
+            <img src="{{reservation.image}}"/>
+        </div>
+        <div class="name">
+            <p>{{reservation.name}}</p>
+        </div>
+        <div class="type-beds">
+            <p>Dates: {{reservation.start | date: 'yyyy-MM-dd'}} - {{reservation.end | date: 'yyyy-MM-dd'}}</p>
+        </div>
+        <div class="blank"></div>
+        <div class="stars-reviews">
+            <span class="stars">Guests: {{reservation.guests}}</span>
+        </div>
+        <div class="cost">
+            <span class="cost-per-day">€{{reservation.cost}}</span>
+            <span>in total.</span>
+        </div>
+    </div>
+    <mat-paginator *ngIf="reservationList.length > 0" [length]="reservationList.length"
+                  [pageSize]="10">
+    </mat-paginator>
+</div>

@@ -1,0 +1,63 @@
+<div class="header">
+    <a routerLink="/">
+        <img src="../../favicon.ico"/>
+    </a>
+
+    <ul>
+        <li>
+            <a>
+                Help
+            </a>
+        </li>
+        <li *ngIf="(service.getRole() == '2' || service.getRole() == '1') && isAccepted()" class="dropdown">
+            <a class="dropbtn">
+                My rooms
+            </a>
+            <div class="dropdown-content">
+                <a *ngIf="(service.getRole() == '2' || service.getRole() == '1') && isAccepted()" routerLink="add-room">
+                    Add room
+                </a>
+                <a *ngIf="(service.getRole() == '2' || service.getRole() == '1') && isAccepted()" routerLink="view-rooms">
+                    View rooms
+                </a>
+            </div>
+        </li>
+        <li *ngIf="service.isLoggedIn() && (service.getRole() == '2' || service.getRole() == '0')">
+            <a routerLink="reservations">
+                My reservations
+            </a>
+        </li>
+        <li *ngIf="!service.isLoggedIn()">
+            <a (click)="doRegister()">
+                Register
+            </a>
+        </li>
+        <li *ngIf="!service.isLoggedIn()">
+            <a (click)="doLogin()">
+                Login
+            </a>
+        </li>
+        <li *ngIf="service.isLoggedIn()" class="dropdown">
+            <a class="dropbtn">
+                {{service.getUsername()}}
+            </a>
+            <div class="dropdown-content">
+                <a *ngIf="service.isAdmin() == '1'" routerLink="admin-panel">
+                    Admin panel
+                </a>
+                <a *ngIf="service.isLoggedIn()" routerLink="chat-list">
+                    My messages
+                </a>
+                <a routerLink="edit-profile">
+                    Edit profile
+                </a>
+                <a (click)="service.logout()">
+                    Logout
+                </a>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<app-login *ngIf="showLogin"></app-login>
+<app-register *ngIf="showRegister"></app-register>

@@ -1,0 +1,22 @@
+<div class="heading-chat">
+    <div class="blank"></div>
+    <h1>Here you can chat with {{recverUsername}}</h1>
+</div>
+
+<div class="chat-box">
+    <br>
+    <div *ngFor="let message of messageList">
+        <div [ngClass]="(message.sender_id == senderID) ? 'sender' : 'recver'">
+            <span>
+                {{message.message}}
+            </span>
+        </div>
+    </div>
+</div>
+
+<form class="message-button-box" [formGroup]="messageForm" (ngSubmit)="sendMessage(messageForm.value)">
+    <input class="message-body" type="text" formControlName="Message" placeholder="Type a message" autocomplete="none">
+    <div class="blank"></div>
+    <button class="button" type="submit">Send</button>
+    <button class="delete" type="button" (click)="deleteMessages()">Delete conversation</button>
+</form>

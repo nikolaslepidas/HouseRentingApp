@@ -1,0 +1,127 @@
+https://angular.io/guide/http
+
+inside app.module.ts:
+
+	import { HttpClientModule } from '@angular/common/http';
+
+	import to import array of class
+	
+inside a typescript file (component, service, etc) in order to inject:
+
+	import { HttpClient } from '@angular/common/http';
+	
+	on constructor args: private http: HttpClient
+	
+	also: import { Observable } from 'rxjs';
+	
+The get() method takes two arguments; the endpoint URL from which to fetch, and an options object that you can use to configure the request.
+
+options: {
+    headers?: HttpHeaders | {[header: string]: string | string[]},
+    observe?: 'body' | 'events' | 'response',
+    params?: HttpParams|{[param: string]: string | string[]},
+    reportProgress?: boolean,
+    responseType?: 'arraybuffer'|'blob'|'json'|'text',
+    withCredentials?: boolean,
+  }
+  
+  The observe option specifies how much of the response to return. --> default value: body
+  
+  The responseType option specifies the format in which to return data. --> default value: json
+  
+INSIDE SERVICE:
+
+configUrl = 'assets/config.json';
+
+getConfig() {
+  return this.http.get(this.configUrl);
+}
+
+Because the service method returns an Observable of configuration data, the component subscribes to the method's return value.
+
+INSIDE COMPONENT THAT USES SERVICE (USING INJECT)
+
+showConfig() {
+  this.configService.getConfig()
+    .subscribe((data: Config) => this.config = {
+        heroesUrl: data.heroesUrl,
+        textfile:  data.textfile
+    });
+}
+
+To specify the response object type, first define an interface with the required properties.
+Use an interface rather than a class, because the response is a plain object that cannot be automatically converted to an instance of a class.
+
+version2 getConfig:
+
+getConfig() {
+  // now returns an Observable of Config
+  return this.http.get<Config>(this.configUrl);
+}
+
+BUT:
+
+When you pass an interface as a type parameter to the HttpClient.get() method, you can use the RxJS map operator to transform the response data as needed by the UI.
+You can then pass the transformed data to the async pipe.
+
+version2 showConfig: // with type-cast to any in order to convert from plain-object(JSON) to object-Config
+
+config: Config;
+
+showConfig() {
+  this.configService.getConfig()
+    // clone the data object, using its known Config shape
+    .subscribe(data => this.config = {
+	  heroesUrl: (data as any).heroesUrl,
+	  textfile:  (data as any).textfile,
+	});
+}
+
+AS CONST IS NEEDED BECAUSE WITHOUT IT TYPESCRIPT TRANSLATES IT TO : resposeType: string
+
+const options = {
+  responseType: 'text' as const,
+};
+client.get('/foo', options);
+
+https://angular.io/guide/http#reading-the-full-response --> read headers and map keys from headers and then read body seperately.
+
+Error handling!
+
+This is a handler used in service typescript file.
+
+private handleError(error: HttpErrorResponse) {
+  if (error.error instanceof ErrorEvent) {
+    // A client-side or network error occurred. Handle it accordingly.
+    console.error('An error occurred:', error.error.message);
+  } else {
+    // The backend returned an unsuccessful response code.
+    // The response body may contain clues as to what went wrong.
+    console.error(
+      `Backend returned code ${error.status}, ` +
+      `body was: ${error.error}`);
+  }
+  // Return an observable with a user-facing error message.
+  return throwError(
+    'Something bad happened; please try again later.');
+}
+
+so getConfig() use pipe to send Observable to this handler.
+
+getConfig() {
+  return this.http.get<Config>(this.configUrl)
+    .pipe(
+      catchError(this.handleError)
+    );
+}
+
+Retry failed operations! Commonly used in network error state... so: (import from rxjs/operators)
+
+getConfig() {
+  return this.http.get<Config>(this.configUrl)
+    .pipe(
+      retry(3), // retry a failed request up to 3 times
+      catchError(this.handleError) // then handle the error
+    );
+}
+

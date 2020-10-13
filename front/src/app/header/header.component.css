@@ -1,0 +1,81 @@
+.header {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    padding: 14px;
+    /* margin: 0; */
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;   /* TODO: see what this clearfix hack does */
+}
+
+li {
+    float: right;
+}
+
+li a, .dropbtn {
+    display: inline-block;
+    padding: 8px 16px;
+    margin: 2px;
+    color: #15326f;
+    text-decoration: none;
+    border: 0.5px solid transparent;
+    border-radius: 8px;
+}
+
+li a:hover, .dropdown:hover .dropbtn {
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+li > a:focus {
+    border: 0.5px solid #f0f0f0;
+    outline: 0;                   /* Removes dashed line when a link from menu is clicked */
+    cursor: pointer;
+}
+
+img {
+    float: left;
+    padding-top: 4px;
+}
+
+/* TODO: Add hamburger menu for small screens (responsive design) */
+@media screen and (max-width: 500px) {
+    li {
+        float: none;
+    }
+}
+
+li.dropdown {
+    display: inline-block;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    padding: 5px 0px;
+    z-index: 1;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: #15326f;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }

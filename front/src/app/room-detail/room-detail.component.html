@@ -1,0 +1,150 @@
+<!-- Leaflet's CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
+<!-- Leaflet's JS -->
+<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
+<!-- JQuery from google CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<app-search></app-search>
+
+<hr>
+
+<div class="room-detail">
+
+    <div class="slideshow-book">
+        <!-- Images gallery / Slideshow container -->
+        <div *ngIf="imagesAreReady" class="slideshow-container">
+            <div *ngFor="let image of images" class="mySlides fade">
+                <img src="{{image}}" style="width:100%">
+                <a class="prev" (click)="plusSlides(-1)">&#10094;</a>
+                <a class="next" (click)="plusSlides(1)">&#10095;</a>
+            </div>
+        </div>
+        <div *ngIf="!imagesAreReady" class="slideshow-container">
+            <h1>Not images available</h1>
+        </div>
+    
+        <!-- Price per night, Dates available, total price, book now button -->
+        <div class="price-available-book">
+            <span id="up-blank"></span>
+            <div class="cost">
+                <span id="cost-per-day">€{{myRoom.costPerNight}}</span>
+                <span>per night</span>
+            </div>
+            <span id="total-cost">Total cost: €{{getTotalCost()}}</span>
+            <button *ngIf="!userService.isLoggedIn() || (userService.isLoggedIn() && userService.getRole() == '1')" class="button not_clickable" disabled>Book now</button>
+            <button *ngIf="userService.isLoggedIn() && (userService.getRole() == '0' || userService.getRole() == '2')" class="button" (click)="bookRoom()">Book now</button>
+            <span id="down-blank"></span>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="details-inside-container">
+        <div class="overview">
+            <h2>{{myRoom.name}}</h2>
+            <div class="properties">
+                <span>House: {{myRoom.type}}</span>
+                <span>Bedrooms: {{myRoom.bedrooms}}</span>
+                <span>Beds: {{myRoom.beds}}</span>
+                <span>Baths: {{myRoom.bathrooms}}</span>
+                <span>Kitchens: {{myRoom.kitchens}}</span>
+            </div>
+        </div>
+
+        <hr>
+    
+        <div class="description">
+            <h2>Description</h2>
+            <span>{{myRoom.description}}</span>
+        </div>
+    
+        <hr>
+
+        <div class="overview">
+            <h2>Amentities</h2>
+            <div class="properties">
+                <span *ngIf="myRoom.airCondition">Air conditioning</span>
+                <span *ngIf="myRoom.elevator">Elevator</span>
+                <span *ngIf="myRoom.parking">Parking</span>
+                <span *ngIf="myRoom.tv">TV</span>
+                <span *ngIf="myRoom.wifi">Internet or Wifi</span>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="reviews">
+            <h2>Reviews</h2>
+            
+            <mat-accordion>
+                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>Click here to see room's reviews ({{myRoom.reviews}})</mat-panel-title>
+                        <mat-panel-description *ngIf="myRoom.rating != 0">
+                            <mat-icon *ngFor="let star of stars;index as i" color='warn'>{{showStar(i)}}</mat-icon>
+                            <span>
+                                ({{myRoom.rating}}/5)
+                            </span>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <div class="reviews-grid">
+                        <div *ngFor="let review of reviews">
+                            <img src="../../assets/images/star_rate-24px.svg">
+                            <span>{{review.rating}}/5</span>
+                            <p>{{review.review}}</p>
+                            <br>
+                        </div>
+                        <div *ngIf="reviews.length == 0">
+                            <span>No available reviews for this room.</span>
+                        </div>
+                    </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+
+        <hr>
+
+        <div class="renter-rules">
+            <h2>Renter rules</h2>
+            <div class="properties">
+                <!-- <span *ngIf="!myRoom.smoking">No smoking</span>
+                <span *ngIf="!myRoom.pet">No pets</span> -->
+                <span >No smoking</span>
+                <span >No pets</span>
+            </div>
+        </div>
+    
+        <hr>
+    
+        <div class="location">
+            <h2>Location - Map</h2>
+            <div class="properties">
+                <span class="address">{{myRoom.address}}</span>
+                <span class="city">{{myRoom.city}}</span>
+                <span class="region">{{myRoom.region}}</span>
+                <span class="latlon">[{{myRoom.latitude}}, {{myRoom.longitude}}]</span>
+                <div id="mapid" style="width: 600px; height: 400px;"></div>
+            </div>
+        </div>
+    
+        <hr>
+    
+        <div class="host">
+            <h2>Host's details</h2>
+            <div class="host-grid">
+                <img src="{{host.profile_img}}">
+                <div id="host-name">
+                    <span>{{host.name}} {{host.surname}}</span>
+                </div>
+                <!-- <div id="host-reviews">
+                    <span>Host's reviews:</span>
+                    <a href="">({{host.numReviews}})</a>
+                </div> -->
+                <button *ngIf="!userService.isLoggedIn() || (userService.isLoggedIn() && userService.getRole() == '1')" class="button not_clickable" disabled>Send message</button>
+                <button *ngIf="userService.isLoggedIn() && (userService.getRole() == '0' || userService.getRole() == '2')" class="button" (click)="goToChat(myRoom.host)">Send message</button>
+            </div>
+        </div>
+    </div>
+
+</div>

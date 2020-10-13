@@ -1,0 +1,86 @@
+<div class="search-bar">
+    <form [formGroup]="searchForm" (ngSubmit)="onSubmit(searchForm.value)">
+        <span>
+            <!-- Search location -->
+            <mat-form-field appearance="fill">
+                <mat-label>Location</mat-label>
+                <input matInput #loc formControlName="Location" placeholder="Where are you going?" autocomplete="off" required>
+                <mat-icon matSuffix>location_on</mat-icon>
+                <mat-error *ngIf="searchForm.get('Location').invalid">This field is required</mat-error>
+            </mat-form-field>
+    
+            <!-- Arrive datepicker -->
+            <mat-form-field appearance="fill">
+                <mat-label>Arrive</mat-label>
+                <input matInput #fd [matDatepicker]="arrive_picker" formControlName="FromDate" [min]="minFromDate" (focus)="arrive_picker.open()" readonly required>
+                <mat-datepicker-toggle matSuffix [for]="arrive_picker">
+                    <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #arrive_picker></mat-datepicker>
+                <mat-error *ngIf="searchForm.get('FromDate').invalid && searchForm.get('FromDate').dirty">{{getErrorMessageFromDate()}}</mat-error>
+            </mat-form-field>
+    
+            <!-- Depart datepicker -->
+            <mat-form-field appearance="fill">
+                <mat-label>Depart</mat-label>
+                <input matInput #td [matDatepicker]="depart_picker" [matDatepickerFilter]="dateFilter" formControlName="ToDate" [min]="minFromDate" (focus)="depart_picker.open()" readonly required>
+                <mat-datepicker-toggle matSuffix [for]="depart_picker">
+                    <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #depart_picker></mat-datepicker>
+                <mat-error *ngIf="searchForm.get('ToDate').invalid">{{getErrorMessageToDate()}}</mat-error>
+            </mat-form-field>
+    
+            <!-- Number of guests -->
+            <mat-form-field appearance="fill">
+                <mat-label>Guests</mat-label>
+                <input matInput type="text" readonly value="{{print_guests()}}" mat-button [matMenuTriggerFor]="menu">
+                <mat-icon matSuffix>people_alt</mat-icon>
+                <mat-menu #menu="matMenu">
+                    <div class="menu-item" (click)="$event.stopPropagation();">
+                        <span>{{print_adults()}}</span>
+                        <button>
+                            <mat-icon (click)="remove_adults()">remove_circle_outline</mat-icon>
+                        </button>
+                        <button>
+                            <mat-icon (click)="add_adults()">add_circle_outline</mat-icon>
+                        </button>
+                    </div>
+                    <div class="menu-item" (click)="$event.stopPropagation();">
+                        <span>{{print_children()}}</span>
+                        <button>
+                            <mat-icon (click)="remove_children()">remove_circle_outline</mat-icon>
+                        </button>
+                        <button>
+                            <mat-icon (click)="add_children()">add_circle_outline</mat-icon>
+                        </button>
+                    </div>
+                </mat-menu>
+            </mat-form-field>
+    
+            <!-- Search button disabled while there is some fields invalid
+            <div class="button not_clickable" *ngIf="!allValid()">
+                <button mat-button type="button" disabled>
+                    <mat-icon>search</mat-icon>Search</button>
+            </div>
+    
+            Search button enabled if all fields are valid
+            <div class="button" *ngIf="allValid()">
+                <button mat-button type="button" routerLink="/search-results/{{loc.value}}/{{changeFormatDate(fd.value | date: 'yyyy-MM-dd')}}/{{changeFormatDate(td.value | date: 'yyyy-MM-dd')}}/{{adults}}/{{children}}/0">
+                    <mat-icon>search</mat-icon>Search</button>
+            </div> -->
+
+            <!-- Advanced search button disabled while there is some fields invalid -->
+            <div class="button not_clickable" *ngIf="!allValid()">
+                <button mat-button type="button" disabled>
+                    <mat-icon>search</mat-icon>Search</button>
+            </div>
+    
+            <!-- Advanced search button enabled if all fields are valid -->
+            <div class="button" *ngIf="allValid()">
+                <button mat-button type="button" routerLink="/search-results/{{loc.value}}/{{changeFormatDate(fd.value | date: 'yyyy-MM-dd')}}/{{changeFormatDate(td.value | date: 'yyyy-MM-dd')}}/{{adults}}/{{children}}/1">
+                    <mat-icon>search</mat-icon>Search</button>
+            </div>
+        </span>
+    </form>
+</div>

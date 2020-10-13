@@ -1,0 +1,383 @@
+<!-- Leaflet's CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
+<!-- Leaflet's JS -->
+<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
+<!-- JQuery from google CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<div *ngIf="userService.isLoggedIn() && (userService.getRole() == '2' || userService.getRole() == '1')">
+
+    <div class="heading-add-room">
+        <div class="blank"></div>
+        <h1>Share your room to be rented!</h1>
+        <br>
+    </div>
+
+    <div class="main-add-room">
+            <form [formGroup]="addRoomForm" (ngSubmit)="onSubmit(addRoomForm.value)">
+
+            <div *ngIf="!showMap && !showPart2 && !showPart3 && !showPart4" class="coords">
+                <h1>Add location</h1>
+
+                <!-- Address autocomplete by Google Api -->
+                <div class="input-field">
+                    <mat-form-field appearance="fill">
+    
+                        <mat-label>Location</mat-label>
+    
+                        <input ngx-google-places-autocomplete [options]='options' #placesRef="ngx-places" (onAddressChange)="handleAddressChange($event)" matInput type="text" placeholder="Enter a location..." required>
+    
+                    </mat-form-field>
+                </div>
+
+            </div>
+
+            <div *ngIf="showMap" class="map">
+                <h1>Location</h1>
+            </div>
+            <div id="mapid" style="width: 600px; height: 400px; margin: auto;"></div>
+            <br>
+
+            <div *ngIf="showMap" class="addr-trans">
+    
+                <!-- Address -->
+                <div class="input-field">
+                    <mat-form-field appearance="fill" hideRequiredMarker>
+    
+                        <mat-label>Address</mat-label>
+    
+                        <input matInput type="text" formControlName="address" placeholder="Address" required readonly>
+    
+                        <mat-error *ngIf="addRoomForm.get('address').invalid">This field is required.</mat-error>
+    
+                    </mat-form-field>
+    
+                </div>
+    
+                <!-- City -->
+                <div class="input-field">
+                    <mat-form-field appearance="fill" hideRequiredMarker>
+    
+                        <mat-label>City</mat-label>
+    
+                        <input matInput type="text" formControlName="city" placeholder="City" required readonly>
+    
+                        <mat-error *ngIf="addRoomForm.get('city').invalid">This field is required.</mat-error>
+    
+                    </mat-form-field>
+    
+                </div>
+    
+                <!-- Region -->
+                <div class="input-field">
+                    <mat-form-field appearance="fill" hideRequiredMarker>
+    
+                        <mat-label>Region</mat-label>
+    
+                        <input matInput type="text" formControlName="region" placeholder="Region" required readonly>
+    
+                        <mat-error *ngIf="addRoomForm.get('region').invalid">This field is required.</mat-error>
+    
+                    </mat-form-field>
+    
+                </div>
+    
+                <div class="button-grid">
+                    <!-- Back button enabled if both address and city and region are valid -->
+                    <div class="button back">
+                        <button type="button" (click)="goBackToPart1()">Back</button>
+                    </div>
+        
+                    <!-- Next button disabled while address or city or region are invalid -->
+                    <div class="button next not_clickable" *ngIf="addRoomForm.get('address').invalid || addRoomForm.get('region').invalid || addRoomForm.get('city').invalid">
+                        <button type="button" disabled>Next</button>
+                    </div>
+        
+                    <!-- Next button enabled if both address and city and region are valid -->
+                    <div class="button next" *ngIf="addRoomForm.get('address').valid && addRoomForm.get('region').valid && addRoomForm.get('city').valid">
+                        <button type="button" (click)="goToPart2()">Next</button>
+                    </div>
+                </div>
+    
+            </div>
+
+            <div *ngIf="showPart2">
+    
+                <h1>Add some more information...</h1>
+    
+                <!-- Start datepicker -->
+                <div class="input-field">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Available from</mat-label>
+                        <input matInput #fd [(ngModel)]="start" [matDatepicker]="start_datepicker" formControlName="start" [min]="minStart" (focus)="start_datepicker.open()" readonly required>
+                        <mat-datepicker-toggle matSuffix [for]="start_datepicker"></mat-datepicker-toggle>
+                        <mat-datepicker #start_datepicker></mat-datepicker>
+                        <!-- <mat-error *ngIf="addRoomForm.get('start').invalid && addRoomForm.get('start').dirty">{{getErrorMessagestart()}}</mat-error> -->
+                    </mat-form-field>
+                </div>
+    
+                <!-- End datepicker -->
+                <div class="input-field">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Available till</mat-label>
+                        <input matInput #fd [(ngModel)]="end" [matDatepicker]="end_datepicker" [matDatepickerFilter]="dateFilter" formControlName="end" [min]="minEnd" (focus)="end_datepicker.open()" readonly required>
+                        <mat-datepicker-toggle matSuffix [for]="end_datepicker"></mat-datepicker-toggle>
+                        <mat-datepicker #end_datepicker></mat-datepicker>
+                        <!-- <mat-error *ngIf="addRoomForm.get('end').invalid && addRoomForm.get('end').dirty">{{getErrorMessageend()}}</mat-error> -->
+                    </mat-form-field>
+                </div>
+    
+                <!-- Min days -->
+                <div class="input-field">
+                    <mat-form-field appearance="fill">
+    
+                        <mat-label>Min days</mat-label>
+    
+                        <input matInput type="number" formControlName="minDays" placeholder="Minimum stay days" required>
+    
+                        <mat-error *ngIf="addRoomForm.get('minDays').invalid">{{getErrorMsgMinDays()}}</mat-error>
+    
+                    </mat-form-field>
+                </div>
+    
+                <!-- Maximum number of guests -->
+                <div class="input-field">
+                    <mat-form-field appearance="fill">
+    
+                        <mat-label>Maximum number of guests</mat-label>
+    
+                        <input matInput type="number" formControlName="guests" placeholder="Maximum number of guests">
+    
+                        <mat-error *ngIf="addRoomForm.get('guests').invalid">{{getErrorMsgMaxGuests()}}</mat-error>
+    
+                    </mat-form-field>
+                </div>
+    
+                <!-- Cost per night -->
+                <div class="input-field">
+                    <mat-form-field appearance="fill">
+    
+                        <mat-label>Cost per night</mat-label>
+    
+                        <input matInput type="number" formControlName="costPerNight" placeholder="Cost per night" required>
+    
+                        <mat-error *ngIf="addRoomForm.get('costPerNight').invalid">{{getErrorMsgCPN()}}</mat-error>
+    
+                    </mat-form-field>
+                </div>
+
+                <div class="button-grid">
+                    <!-- Back button -->
+                    <div class="button back">
+                        <button type="button" (click)="goBackToPart1()">Back</button>
+                    </div>
+    
+                    <!-- Next button disabled while start or end or minDays or guests or costPerNight are invalid -->
+                    <div class="button next not_clickable" *ngIf="addRoomForm.get('start').invalid || addRoomForm.get('end').invalid || addRoomForm.get('minDays').invalid || addRoomForm.get('guests').invalid || addRoomForm.get('costPerNight').invalid">
+                        <button type="button" disabled>Next</button>
+                    </div>
+        
+                    <!-- Next button enabled if start and end and minDays and guests and costPerNight are valid -->
+                    <div class="button next" *ngIf="addRoomForm.get('start').valid && addRoomForm.get('end').valid && addRoomForm.get('minDays').valid && addRoomForm.get('guests').valid && addRoomForm.get('costPerNight').valid">
+                        <button type="button" (click)="goToPart3()">Next</button>
+                    </div>
+                </div>
+    
+            </div>
+
+            <div *ngIf="showPart3">
+    
+                <h1>Last information about your apartment...</h1>
+    
+                <!-- Name -->
+                <div class="input-field">
+                    <mat-form-field appearance="fill">
+    
+                        <mat-label>Name</mat-label>
+    
+                        <input matInput type="text" formControlName="name" placeholder="Name" required>
+    
+                        <mat-error *ngIf="addRoomForm.get('name').invalid">This field is required.</mat-error>
+    
+                    </mat-form-field>
+    
+                </div>
+    
+                <!-- Type -->
+                <div class="input-field">
+                    <mat-form-field appearance="fill">
+    
+                        <mat-label>House type</mat-label>
+    
+                        <mat-select formControlName="type" required>
+                            <mat-option *ngFor="let type of types" [value]="type.value">
+                                {{type.value}}
+                            </mat-option>
+                        </mat-select>
+    
+                        <mat-error *ngIf="addRoomForm.get('type').invalid">This field is required.</mat-error>
+    
+                    </mat-form-field>
+                </div>
+    
+                <!-- Description -->
+                <div class="input-field">
+                    <mat-form-field appearance="fill">
+    
+                        <mat-label>Description</mat-label>
+    
+                        <textarea matInput type="text" formControlName="description" placeholder="Description" style="overflow: hidden;" required></textarea>
+    
+                        <mat-error *ngIf="addRoomForm.get('description').invalid">{{getErrorMsgDescription()}}</mat-error>
+    
+                    </mat-form-field>
+    
+                </div>
+    
+                <!-- Bedrooms -->
+                <div class="input-field">
+                    <mat-form-field appearance="fill">
+    
+                        <mat-label>Bedrooms</mat-label>
+    
+                        <input matInput type="number" formControlName="bedrooms" placeholder="Number of bedrooms" required>
+    
+                        <mat-error *ngIf="addRoomForm.get('bedrooms').invalid">{{getErrorMsgBedrooms()}}</mat-error>
+    
+                    </mat-form-field>
+                </div>
+    
+                <!-- Beds -->
+                <div class="input-field">
+                    <mat-form-field appearance="fill">
+    
+                        <mat-label>Beds</mat-label>
+    
+                        <input matInput type="number" formControlName="beds" placeholder="Number of beds" required>
+    
+                        <mat-error *ngIf="addRoomForm.get('beds').invalid">{{getErrorMsgBeds()}}</mat-error>
+    
+                    </mat-form-field>
+                </div>
+    
+                <!-- Bathrooms -->
+                <div class="input-field">
+                    <mat-form-field appearance="fill">
+    
+                        <mat-label>Bathrooms</mat-label>
+    
+                        <input matInput type="number" formControlName="bathrooms" placeholder="Number of bathrooms" required>
+    
+                        <mat-error *ngIf="addRoomForm.get('bathrooms').invalid">{{getErrorMsgBathrooms()}}</mat-error>
+    
+                    </mat-form-field>
+                </div>
+    
+                <!-- Kitchens -->
+                <div class="input-field">
+                    <mat-form-field appearance="fill">
+    
+                        <mat-label>Kitchens</mat-label>
+    
+                        <input matInput type="number" formControlName="kitchens" placeholder="Number of kitchens" required>
+    
+                        <mat-error *ngIf="addRoomForm.get('kitchens').invalid">{{getErrorMsgKitchens()}}</mat-error>
+    
+                    </mat-form-field>
+                </div>
+    
+                <!-- Renter rules -->
+                <h1>Click on whatever you agree with.</h1>
+                <div class="input-field">
+    
+                    <mat-checkbox formControlName="smoking" color="primary">Smoking</mat-checkbox>
+                    <mat-checkbox formControlName="pets" color="primary">Pets</mat-checkbox>
+    
+                </div>
+    
+                <!-- Amentities -->
+                <h1>Click on whatever your apartment provides.</h1>
+                <div class="input-field">
+    
+                    <mat-checkbox formControlName="tv" color="primary">TV</mat-checkbox>
+                    <mat-checkbox formControlName="wifi" color="primary">Internet or Wifi</mat-checkbox>
+                    <mat-checkbox formControlName="airCondition" color="primary">Air conditioning</mat-checkbox>
+                    <mat-checkbox formControlName="elevator" color="primary">Elevator</mat-checkbox>
+                    <mat-checkbox formControlName="parking" color="primary">Parking available</mat-checkbox>
+
+                </div>
+
+                <div class="button-grid">
+                    <!-- Back button -->
+                    <div class="button back">
+                        <button type="button" (click)="goBackToPart2()">Back</button>
+                    </div>
+    
+                    <!-- Next button disabled while name or type or description or bedrooms or beds or bathrooms or kitchens are invalid -->
+                    <div class="button next not_clickable" *ngIf="addRoomForm.get('name').invalid || addRoomForm.get('type').invalid || addRoomForm.get('description').invalid || addRoomForm.get('bedrooms').invalid || addRoomForm.get('beds').invalid || addRoomForm.get('bathrooms').invalid || addRoomForm.get('kitchens').invalid">
+                        <button type="button" disabled>Next</button>
+                    </div>
+        
+                    <!-- Next button button enabled if name and type and description and bedrooms and beds and bathrooms and kitchens are valid -->
+                    <div class="button next" *ngIf="addRoomForm.get('name').valid && addRoomForm.get('type').valid && addRoomForm.get('description').valid && addRoomForm.get('bedrooms').valid && addRoomForm.get('beds').valid && addRoomForm.get('bathrooms').valid && addRoomForm.get('kitchens').valid">
+                        <button type="button" (click)="goToPart4()">Next</button>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div *ngIf="showPart4">
+
+                <h1>As a last step please add the main image and extra images of your apartment!</h1>
+
+                <input #fileInput formControlName="image" type="file" accept="image/*" name="file" style="display: none" required>
+                <div class="button">
+                    <button type="button" (click)="fileInput.click()">Choose main image</button>
+                </div>
+
+                <input #fileInput2 formControlName="images" type="file" accept="image/*" name="file" style="display: none" multiple required>
+                <div class="button">
+                    <button type="button" (click)="fileInput2.click()">Choose extra images</button>
+                </div>
+
+                <div class="button-grid">
+                    <!-- Back button -->
+                    <div class="button back">
+                        <button type="button" (click)="goBackToPart3()">Back</button>
+                    </div>
+    
+                    <!-- Add my room button disabled image or images are invalid -->
+                    <div class="button next not_clickable" *ngIf="addRoomForm.get('image').invalid || addRoomForm.get('images').invalid">
+                        <button type="button" disabled>Add my room</button>
+                    </div>
+        
+                    <!-- Add my room button enabled if image and images are valid -->
+                    <div class="button next" *ngIf="addRoomForm.get('image').valid && addRoomForm.get('images').valid">
+                        <button type="submit">Add my room</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div *ngIf="showSuccess" class="modal_background">
+                <div class="modal">
+                    <span (click)="closeSuccessModal()" class="close">&times;</span><br><br>
+                    <span id="success-msg">{{getMsgSuccess()}}</span>
+                </div>
+            </div>
+                <div *ngIf="showFailure" class="modal_background">
+                <div class="modal">
+                    <span (click)="closeFailureModal()" class="close">&times;</span><br><br>
+                    <span id="failure-msg">{{getMsgFailure()}}</span>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<div *ngIf="!(userService.isLoggedIn()) || userService.getRole() == '0'">
+    Permission denied!
+</div>

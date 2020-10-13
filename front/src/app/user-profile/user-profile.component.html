@@ -1,0 +1,32 @@
+<div class="heading-user-profile">
+    <div class="blank"></div>
+    <h1>In the card above you can see info about {{user.username}}</h1>
+    <br>
+    <div class="user-profile-container">
+        <mat-card style="width: 70%; margin: auto;">
+            <mat-card-header>
+                <mat-card-title>{{user.name}} {{user.surname}}</mat-card-title>
+            </mat-card-header>
+            <div *ngIf="profileImage == null" class="mat-icon-account-circle">
+                <mat-icon class="img-no-photo">account_circle</mat-icon>
+            </div>
+            <img *ngIf="profileImage != null" mat-card-image src="{{user.profile_img}}">
+            <br>
+            <mat-card-content>
+                <div class="mat-content">
+                    <span class="label">Email:</span>
+                    <span class="content">{{user.email}}</span>
+                    <span class="label">Phone:</span>
+                    <span class="content">{{user.phone}}</span>
+                    <span class="label">Role:</span>
+                    <span class="content">{{user.role}}</span>
+                </div>
+            </mat-card-content>
+            <mat-card-actions align="end">
+                <button mat-button *ngIf="((user.role == 'Both') || (user.role == 'Host')) && !isAccepted()" (click)="doAcceptUser()">ACCEPT</button>
+                <button mat-button *ngIf="((user.role == 'Both') || (user.role == 'Host')) && !isAccepted()">DECLINE</button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+
+</div>

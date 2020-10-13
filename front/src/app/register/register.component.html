@@ -1,0 +1,147 @@
+<div class="modal_background">
+
+    <div class="modal">
+
+      <span (click)="close()" class="close">&times;</span><br><br>
+
+      <div class="heading-register">
+          <div class="blank"></div>
+          <h1>Create a new account!</h1>
+          <br>
+      </div>
+
+      <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit(checkoutForm.value)">
+
+        <!-- Name -->
+        <div>
+            <mat-form-field appearance="fill">
+              
+              <mat-label>Name</mat-label>
+              
+              <input matInput #reg_name type="text" formControlName="name" name="name" required>
+            
+              <mat-error *ngIf="checkoutForm.get('name').invalid">{{getErrorMessageName(reg_name.value?.length)}}</mat-error>
+
+            </mat-form-field>
+        </div>
+
+        <!-- Surname -->
+        <div>
+            <mat-form-field appearance="fill">
+              
+              <mat-label>Surname</mat-label>
+              
+              <input matInput #reg_surname type="text" formControlName="surname" name="surname" required>
+
+              <mat-error *ngIf="checkoutForm.get('surname').invalid">{{getErrorMessageSurname(reg_surname.value?.length)}}</mat-error>
+            
+            </mat-form-field>
+        </div>
+
+        <!-- Email -->
+        <div>
+            <mat-form-field appearance="fill">
+              
+              <mat-label>Email</mat-label>
+              
+              <input matInput type="email" formControlName="email" name="email" required>
+
+              <mat-error *ngIf="checkoutForm.get('email').invalid">{{getErrorMessageEmail()}}</mat-error>
+            
+            </mat-form-field>
+        </div>
+
+        <!-- Phone number -->
+        <div>
+            <mat-form-field appearance="fill">
+              
+              <mat-label>Phone number</mat-label>
+              
+              <input matInput type="text" formControlName="phone" name="phone" required>
+            
+              <mat-error *ngIf="checkoutForm.get('phone').invalid">{{getErrorMessagePhone()}}</mat-error>
+
+            </mat-form-field>
+        </div>
+
+        <!-- Role(s) -->
+        <div>
+            <mat-form-field appearance="fill">
+
+                <mat-label>Role(s)</mat-label>
+
+                <mat-select formControlName="role" name="role" required>
+                    <mat-option *ngFor="let role of roles" [value]="role.viewValue">
+                        {{role.value}}
+                    </mat-option>
+                </mat-select>
+
+                <mat-error *ngIf="checkoutForm.get('role').invalid">{{getErrorMessageRole()}}</mat-error>
+            
+            </mat-form-field>
+        </div>  
+
+        <!-- Username -->
+        <div>
+          <mat-form-field appearance="fill">
+            
+            <mat-label>Username</mat-label>
+            
+            <input matInput #reg_user type="text" formControlName="username" name="username" required>
+
+            <mat-error *ngIf="checkoutForm.get('username').invalid">{{getErrorMessageUsername(reg_user.value?.length)}}</mat-error>
+          
+          </mat-form-field>
+        </div>
+  
+        <!-- Password -->
+        <div>
+          <mat-form-field appearance="fill">
+            
+            <mat-label>Password</mat-label>
+            
+            <input matInput #reg_pass minlength="8" [type]="hide_pass ? 'password' : 'text'" formControlName="password" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide_pass" name="password" required>
+            
+            <!-- type="button" is needed because default was type="submit" and when user clicks it for second time it was sending the form with the data -->
+            <button type="button" class="mat-i" mat-icon-button matSuffix (click)="hide_pass = !hide_pass" >
+              <mat-icon>{{hide_pass ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+
+            <mat-error *ngIf="checkoutForm.get('password').invalid">{{getErrorMessagePassword(reg_pass.value?.length)}}</mat-error>
+          
+          </mat-form-field>
+        </div>
+
+        <!-- Confirm password -->
+        <div>
+            <mat-form-field appearance="fill">
+              
+              <mat-label>Confirm Password</mat-label>
+              
+              <input matInput #reg_conf_pass [type]="hide_conf_pass ? 'password' : 'text'" formControlName="confirm_password" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide_conf_pass" [errorStateMatcher]="errorMatcher" required>
+              
+              <!-- type="button" is needed because default was type="submit" and when user clicks it for second time it was sending the form with the data -->
+              <button type="button" class="mat-i" mat-icon-button matSuffix (click)="hide_conf_pass = !hide_conf_pass" >
+                <mat-icon>{{hide_conf_pass ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+              
+              <mat-error *ngIf="checkoutForm.hasError('mismatchPasswords')">{{getErrorMessagePasswordMatching()}}</mat-error>
+            
+            </mat-form-field>
+        </div>
+
+        <!-- Register button disabled -->
+        <div class="button not_clickable" *ngIf="!allValid() || checkoutForm.hasError('mismatchPasswords')">
+          <button type="submit" disabled>Register</button>
+        </div>
+
+        <!-- Register button enabled -->
+        <div class="button" *ngIf="allValid() && !checkoutForm.hasError('mismatchPasswords')">
+          <button type="submit">Register</button>
+        </div>
+
+      </form>
+
+    </div>
+    
+  </div>

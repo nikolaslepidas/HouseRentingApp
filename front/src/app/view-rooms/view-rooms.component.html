@@ -1,0 +1,38 @@
+<div *ngIf="userService.isLoggedIn() && (userService.getRole() == '2' || userService.getRole() == '1')">
+
+    <div class="heading-add-room">
+        <div class="blank"></div>
+        <h1>Here you can see your rooms!</h1>
+        <br>
+    </div>
+    
+    <div class="results-list">
+        <div *ngFor="let result of results" (click)="goToRoom(result.id)" class="room-grid">
+            <div class="photo">
+                <img src="{{result.image}}"/>
+            </div>
+            <div class="name">
+                <p>{{result.name}}</p>
+            </div>
+            <div class="type-beds">
+                <p>{{result.type}} · Sleeps {{result.beds}}</p>
+            </div>
+            <div class="blank"></div>
+            <div class="stars-reviews">
+                <!-- <mat-icon style="vertical-align: baseline;">star_rate</mat-icon> [inline]="true"-->
+                <img src="../../assets/images/star_rate-24px.svg">
+                <span class="stars">{{result.rating}}</span>
+                <span class="reviews">({{result.reviews}})</span>
+            </div>
+            <div class="cost">
+                <span class="cost-per-day">€{{result.costPerNight}}</span>
+                <span>per night.</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div *ngIf="!(userService.isLoggedIn()) || userService.getRole() == '0'">
+    Permission denied!
+</div>

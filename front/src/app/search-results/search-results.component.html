@@ -1,0 +1,38 @@
+<app-search></app-search>
+
+<div class="filter-button">
+    <button (click)="openDialog()">More filters</button>
+    <button *ngIf="filters > 0" class="clear-button" (click)="removeFilters()">Clear filters</button>
+</div>
+
+<hr>
+
+<div class="results-list">
+    <div *ngFor="let result of results" (click)="goToRoom(result.id)" class="room-grid">
+        <div class="photo">
+            <img src="{{result.image}}"/>
+        </div>
+        <div class="name">
+            <p>{{result.name}}</p>
+        </div>
+        <div class="type-beds">
+            <p>{{result.type}} · Sleeps {{result.beds}}</p>
+        </div>
+        <div class="blank"></div>
+        <div class="stars-reviews">
+            <!-- <mat-icon style="vertical-align: baseline;">star_rate</mat-icon> [inline]="true"-->
+            <img src="../../assets/images/star_rate-24px.svg">
+            <span class="stars">{{result.rating}}</span>
+            <span class="reviews">({{result.reviews}})</span>
+        </div>
+        <div class="cost">
+            <span class="cost-per-day">€{{result.costPerNight}}</span>
+            <span>per night.</span>
+        </div>
+    </div>
+    <mat-paginator *ngIf="results.length > 0"
+        [length]="length"
+        [pageSize]="itemsPerPage"
+        (page)="pageEvent = handlePage($event)">
+    </mat-paginator>
+</div>

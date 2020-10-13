@@ -1,0 +1,86 @@
+div.search-bar {
+    /* position: center; */
+    /* top: 40%; */
+    /*display: inline-block;              /* The best way to expand a div to its content width */
+    /* margin-top: 15%; */
+    /* padding: 8px 16px; */
+    border: none;
+    text-align: center;
+    background: transparent;
+}
+
+form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form > span {
+    display: flex;
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 1);
+    border-radius: 8px;
+}
+
+mat-form-field {
+    padding: 5px;
+}
+
+::ng-deep .mat-form-field-wrapper{
+    margin-bottom: -1.25em;
+ }
+
+::ng-deep.mat-menu-panel {
+    max-width: none !important;
+}
+
+div.menu-item {
+    width: 225px;
+    display: flex;
+}
+
+div.menu-item > span {
+    text-align: left;
+    padding: 15px;
+    width: 120px;
+}
+
+div.menu-item > button {
+    border: none;
+    outline: none;
+    border-radius: 50px;
+    background: transparent;
+}
+
+div.button {
+    display: inline-flex;
+}
+
+.button > button {
+    padding: 0px 30px;
+    margin-left: 10px;
+    background-color: #1c3c81;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border: 0.5px solid transparent;
+    border-radius: 30px;
+}
+
+
+.button > button:hover {
+    background-color: #163370;
+    cursor: pointer;
+}
+
+.button > button:focus {
+    border: 0.5px solid #555;
+    outline: 0;                   /* Removes dashed line when a link from menu is clicked */
+    cursor: pointer;
+}
+
+.not_clickable > button, .not_clickable > button:hover, .not_clickable > button:focus {
+    opacity: 0.4;
+    cursor: default;
+    background-color: #1c3c81;
+}

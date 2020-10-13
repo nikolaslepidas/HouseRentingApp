@@ -1,0 +1,32 @@
+<div class="msg-dialog" *ngIf="getRole() == '1'">
+    <h2 mat-dialog-title>Approval as host</h2>
+    <mat-dialog-content>
+        <p>The approval of your registration as host is pending...</p>
+        <p>but you can browse airbnb as guest user!</p>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close (click)="close()">Continue</button>
+    </mat-dialog-actions>
+</div>
+
+<div class="msg-dialog" *ngIf="getRole() == '2'">
+    <h2 mat-dialog-title>Approval as host</h2>
+    <mat-dialog-content>
+        <p>The approval of your registration as host is pending...</p>
+        <p>but you can browse airbnb as renter!</p>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Continue</button>
+    </mat-dialog-actions>
+</div>
+
+<div class="msg-dialog" *ngIf="data.success == 'false'">
+    <h2 mat-dialog-title>Oops! Something went wrong.</h2>
+    <mat-dialog-content>
+        <p>Something went wrong with the communication with the server or...</p>
+        <p>the username you want to use is already in use! Try use another username.</p>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Continue</button>
+    </mat-dialog-actions>
+</div>

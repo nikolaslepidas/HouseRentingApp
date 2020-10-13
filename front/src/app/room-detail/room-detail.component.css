@@ -1,0 +1,296 @@
+:host ::ng-deep div.search-bar  {
+    margin-top: 0 !important;
+    /* padding: 8px 16px; */
+    /* border: none; */
+    /* text-align: left !important; */
+    /* background: transparent; */
+}
+
+:host ::ng-deep div.search-bar form span {
+    background-color: transparent;
+}
+
+div.room-detail {
+    margin: 10px;
+    /* border: 1px solid #555; */
+    border-radius: 8px;
+}
+
+.slideshow-book {
+    display: grid;
+    grid-template-columns: 70% 30%;
+    grid-column-gap: 10px;
+}
+
+/* IMAGE GALLERY. COPYRIGHT W3SCHOOLS */
+
+/* * {
+    box-sizing: border-box;
+} */
+
+/* Slideshow container */
+.slideshow-container {
+    /* display: inline-block; */
+    grid-area: 1 / 1 / 2 / 2;
+    width: 100%;
+    height: 500px;
+}
+
+.mySlides {
+    display: none;
+    width: 100%;
+    height: 100%;
+}
+
+div.mySlides img {  
+    display: inline-flex;
+    width: 70%;
+    height: inherit;
+    border-radius: 8px;
+}
+
+/* Next & previous buttons */
+.prev, .next {
+    display: inline-flex;
+    cursor: pointer;
+    position: absolute;
+    /* top: 55%; */
+    width: auto;
+    padding: 16px;
+    margin-top: 235px;
+    /* margin-top: 22px; */
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+    right: 30.3%;
+    border-radius: 3px;
+}
+
+.prev {
+    left: 0.7%;
+    border-radius: 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover, .next:hover {
+    background-color: rgba(0,0,0,0.8);
+}
+
+/* Fading animation */
+.fade {
+    -webkit-animation-name: fade;
+    -webkit-animation-duration: 1.5s;
+    animation-name: fade;
+    animation-duration: 1.5s;
+}
+
+@-webkit-keyframes fade {
+    from {opacity: .4} 
+    to {opacity: 1}
+}
+
+@keyframes fade {
+    from {opacity: .4} 
+    to {opacity: 1}
+}
+
+.price-available-book {
+    grid-area: 1 / 2 / 2 / 3;
+    display: grid;
+    grid-template-rows: auto auto auto auto auto auto;
+    grid-template-columns: auto;
+    text-align: center;
+}
+
+.cost > span {
+    display: inline-block;
+    margin-top: 35px;
+    font-weight: bold;
+}
+
+#cost-per-day {
+    grid-area: 2 / 1 / 3 / 2;
+    margin: auto;
+    font-size: 24px;
+    padding-right: 5px;
+}
+
+#dates-available {
+    grid-area: 3 / 1 / 4 / 2;
+    margin: auto;
+}
+
+#total-cost {
+    grid-area: 4 / 1 / 5 / 2;
+    margin: auto;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.button {
+    grid-area: 5 / 1 / 6 / 2;
+    margin: auto;
+}
+
+.button {
+    text-align: center;
+}
+
+.button {
+    padding: 12px 50px 12px 50px;
+    background-color: #1c3c81;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border: 0.5px solid transparent;
+    border-radius: 25px;
+}
+
+.button:hover {
+    background-color: #163370;
+    cursor: pointer;
+}
+
+.button:focus {
+    border: 0.5px solid #555;
+    outline: 0;                   /* Removes dashed line when a link from menu is clicked */
+    cursor: pointer;
+}
+
+.not_clickable, .not_clickable:hover, .not_clickable:focus {
+    opacity: 0.4;
+    cursor: default;
+    background-color: #1c3c81;
+}
+
+#up-blank {
+    grid-area: 6 / 1 / 7 / 2;
+    height: 50px;
+}
+
+#up-blank {
+    grid-area: 1 / 1 / 2 / 2;
+    height: 50px;
+}
+
+.details-inside-container {
+    margin: 25px 100px;
+}
+
+.overview, .description, .renter-rules, .location, .host, .reviews {
+    margin: auto;
+    width: 95%;
+}
+
+h2 {
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.properties {
+    display: grid;
+    grid-template-columns: 25% 25% 25%;
+    grid-column-gap: 10px;
+}
+
+.properties > span, .description > span, .renter-rules > span, .location > span {
+    margin: 10px;
+}
+
+.location .address {
+    grid-area: 1 / 1 / 2 / 2;
+    margin: auto;
+}
+
+.location .city {
+    grid-area: 2 / 1 / 3 / 2;
+    margin: auto;
+}
+
+.location .region {
+    grid-area: 3 / 1 / 4 / 2;
+    margin: auto;
+}
+
+.location .latlon {
+    grid-area: 4 / 1 / 5 / 2;
+    margin: auto;
+}
+
+#mapid {
+    grid-area: 1 / 2 / 5 / 3;
+}
+
+.host-grid {
+    margin: 10px;
+    width: 35%;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+    grid-column-gap: 10px;
+}
+
+.host-grid > img {
+    grid-area: 1 / 1 / 3 / 2;
+    width: 120px;
+    height: 150px;
+    border-radius: 5px;
+}
+
+.host-grid #host-name {
+    grid-area: 1 / 2 / 2 / 3;
+    margin: auto;
+}
+
+/* .host-grid #host-reviews {
+    grid-area: 2 / 2 / 3 / 3;
+    margin: auto;
+}
+
+.host-grid #host-reviews a {
+    margin-left: 5px;
+    text-decoration: none;
+    color: rgb(105, 105, 105);
+} */
+
+.host-grid .button {
+    grid-area: 2 / 2 / 3 / 3;
+    margin: auto;
+}
+
+mat-expansion-panel {
+    width: 80%;
+    margin: auto;
+}
+
+.reviews-grid {
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+
+mat-panel-description span {
+    margin-left: 5px;
+}
+
+/* On smaller screens, decrease text size */
+@media only screen and (max-width: 300px) {
+    .prev, .next {
+        font-size: 11px;
+    }
+}
+
+* {
+    letter-spacing: 1px;
+}
+
+hr {
+    margin-top: 20px;
+    width: 85%;
+}

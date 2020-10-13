@@ -1,0 +1,13 @@
+:host ::ng-deep div.search-bar  {
+    margin-top: -110px !important;
+}
+
+.image-search img {
+    height: 600px;
+    width: 100%;
+    z-index: -1;
+}
+
+app-search {
+    z-index: 1;
+}

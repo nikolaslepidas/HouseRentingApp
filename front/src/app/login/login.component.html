@@ -1,0 +1,76 @@
+<div class="modal_background">
+
+  <div class="modal">
+    
+    <span (click)="close()" class="close">&times;</span><br><br>
+    
+    <div class="heading-login">
+        <div class="blank"></div>
+        <h1>Login to your account!</h1>
+        <br>
+    </div>
+
+
+    <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit(checkoutForm.value)">
+        
+      <div>
+        <mat-form-field appearance="fill" hideRequiredMarker>
+          
+          <mat-label>Username</mat-label>
+          
+          <input matInput #login_user minlength="3" type="text" formControlName="username" name="username" required>
+          
+          <mat-error *ngIf="checkoutForm.get('username').invalid">{{getErrorMessageUsername(login_user.value?.length)}}</mat-error>
+          
+        </mat-form-field>
+      </div>
+
+      <br>
+
+      <div>
+        <mat-form-field appearance="fill" hideRequiredMarker>
+          
+          <mat-label>Password</mat-label>
+          
+          <input matInput #login_pass minlength="8" [type]="hide ? 'password' : 'text'" formControlName="password" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" name="password" required>
+          
+          <!-- type="button" is needed because default was type="submit" and when user clicks it for second time it was sending the form with the data -->
+          <button mat-icon-button matSuffix type="button" class="mat-i" (click)="hide = !hide" >
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          
+          <mat-error *ngIf="checkoutForm.get('password').invalid">{{getErrorMessagePassword(login_pass.value?.length)}}</mat-error>
+          
+          <!-- <mat-hint align="start">Password must be at least 8 characters</mat-hint> -->
+        
+        </mat-form-field>
+      </div>
+
+      <br>
+      
+      <!-- Login button disabled while username or password are invalid -->
+      <div class="button not_clickable" *ngIf="checkoutForm.get('username').invalid || checkoutForm.get('password').invalid">
+        <button type="submit" disabled>Login</button>
+      </div>
+
+      <!-- Login button enabled if both username and password are valid -->
+      <div class="button" *ngIf="checkoutForm.get('username').valid && checkoutForm.get('password').valid">
+        <button type="submit">Login</button>
+      </div>
+
+      <div *ngIf="badCredentials">
+        <br>
+        <p style="color: rgb(233, 21, 21); text-align: center;">Wrong username or password.</p>
+      </div>
+
+      <br>
+
+      <div class="forget-password">
+        <a routerLink="/">Forget username or password?</a>
+      </div>
+      
+    </form>
+
+  </div>
+  
+</div>

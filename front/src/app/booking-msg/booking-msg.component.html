@@ -1,0 +1,19 @@
+<div *ngIf="data.success == 'true'">
+    <h2 mat-dialog-title>Your booking is successful!</h2>
+    <mat-dialog-content>
+        <p>Congratulations! Your action is completed successfully. You managed to book vacations with <strong>airbnb</strong>!</p>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close (click)="goToWelcomePage()">Continue</button>
+    </mat-dialog-actions>
+</div>
+
+<div *ngIf="data.success == 'false'">
+    <h2 mat-dialog-title>Oops! Something went wrong.</h2>
+    <mat-dialog-content>
+        <p>Something went wrong with the communication with the server or maybe the host of this room updated room's available range of dates!</p>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Continue</button>
+    </mat-dialog-actions>
+</div>

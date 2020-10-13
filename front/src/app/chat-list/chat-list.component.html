@@ -1,0 +1,21 @@
+<div class="heading-chat-list">
+    <div class="blank"></div>
+    <h1>Here you can see your messages with other users!</h1>
+</div>
+
+<div class="userList-list">
+    <div *ngFor="let user of userList" (click)="goToChat(user.id)" class="chat-user-grid">
+        <div *ngIf="profileImage != null" class="photo">
+            <img src="{{user.profile_img}}"/>
+        </div>
+        <div *ngIf="profileImage == null" class="photo">
+            <mat-icon>account_circle</mat-icon>
+        </div>
+        <div class="name">
+            <p>{{user.name}} {{user.surname}}</p>
+        </div>
+    </div>
+    <mat-paginator *ngIf="userList.length > 0" [length]="userList.length"
+                  [pageSize]="10">
+    </mat-paginator>
+</div>
